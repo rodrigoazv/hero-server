@@ -7,6 +7,7 @@ describe('User CRUD tests', () => {
   beforeAll(async () => {
     await createConnection();
   });
+
   it('it should be return a user created', async () => {
     const response = await request(Application.express)
       .post('/user/create')
@@ -20,6 +21,17 @@ describe('User CRUD tests', () => {
       });
     expect(response.body).toHaveProperty('user');
   });
+
+  it('should be return a user if uptade status ok', async () => {
+    const response = await request(Application.express)
+      .put('/user/update')
+      .send({
+        email: 'rodrigo@gmail.com',
+        nickName: 'roazvzão',
+      });
+    expect(response.body).toHaveProperty('user');
+  });
+
   it('should be return a token if login status ok', async () => {
     const response = await request(Application.express)
       .post('/user/login')
@@ -29,6 +41,7 @@ describe('User CRUD tests', () => {
       });
     expect(response.body).toHaveProperty('token');
   });
+
   it('it should be return a user created fail', async () => {
     const response = await request(Application.express)
       .post('/user/create')

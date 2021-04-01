@@ -11,8 +11,8 @@ class UserController {
    */
   public async create(req: Request, res: Response): Promise<any> {
     const userService = new UserService();
+    const userNew = new User();
     try {
-      const userNew = new User();
       if (!req.body.email) {
         return res.status(422).json({ errors: { email: "can't be blank" } });
       }
@@ -25,7 +25,41 @@ class UserController {
       userNew.nickName = req.body.nickName;
       userNew.password = req.body.password;
       userNew.birthDay = new Date(req.body.birthDay);
+      /* Service call to insert one user
+       */
       const userCreated = await userService.insertOne(userNew);
+      return res.status(200).json({
+        sucess: true,
+        user: {
+          userCreated,
+        },
+      });
+    } catch (error) {
+      return res.status(400).json({
+        sucess: false,
+        errors: 'An error',
+      });
+      // Todo
+    }
+  }
+
+  /* Method { @Put } for update user
+   *recive request with email and details to update
+   *return user if update work (Todo)
+   */
+  public async update(req: Request, res: Response): Promise<any> {
+    const userService = new UserService();
+    try {
+      if (!req.body.email) {
+        return res.status(422).json({ errors: { email: "can't be blank" } });
+      }
+      const userOld = await userService.getByEmailProtected(req.body.email);
+      // verify params, if not pass, recive same
+      userOld.firstName = req.body.firstName || userOld.firstName;
+      userOld.nickName = req.body.nickName || userOld.nickName;
+      /* Service call to update one user
+       */
+      const userCreated = await userService.updateUser(userOld);
       return res.status(200).json({
         sucess: true,
         user: {

@@ -21,4 +21,26 @@ export default class UserService {
     const userSaved = await this.userRepository.save(newUser);
     return userSaved;
   }
+
+  async updateUser(data: User) {
+    const userSaved = await this.userRepository
+      .createQueryBuilder()
+      .update(User)
+      .set(data)
+      .where('id = :id', { id: data.id })
+      .execute();
+    return userSaved;
+  }
+
+  async getByEmailProtected(email: string): Promise<User | any> {
+    try {
+      const user = this.userRepository
+        .createQueryBuilder('user')
+        .where('user.email = :email', { email })
+        .getOne();
+      return user;
+    } catch (err) {
+      return err;
+    }
+  }
 }

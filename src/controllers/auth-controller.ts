@@ -9,6 +9,7 @@ class AuthController {
    *recive request with email and password ( Required params )
    *return token if user exist
    */
+
   public async login(req: Request, res: Response): Promise<any> {
     const authService = new AuthService();
     const authHandler = new AuthHandler();
