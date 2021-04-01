@@ -19,6 +19,13 @@
         "prettier"
     ],
     "rules": {
-        "prettier/prettier": "error"
+        "prettier/prettier": "error",
+        "class-methods-use-this": 0,
+        "import/no-unresolved": [ 0, 
+            { "caseSensitive": false }
+        ],
+        "import/extensions": [ "error", "never",{
+            "json": "always" 
+        }]
     }
 }

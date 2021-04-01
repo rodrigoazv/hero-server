@@ -1,5 +1,3 @@
-import express from 'express';
+import { Application } from './app';
 
-const app = express();
-
-app.listen(3333);
+new Application().Setup();
