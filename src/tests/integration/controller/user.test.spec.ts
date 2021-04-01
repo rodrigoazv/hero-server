@@ -20,6 +20,15 @@ describe('User CRUD tests', () => {
       });
     expect(response.body).toHaveProperty('user');
   });
+  it('should be return a token if login status ok', async () => {
+    const response = await request(Application.express)
+      .post('/user/login')
+      .send({
+        password: '123456',
+        email: 'rodrigo@gmail.com',
+      });
+    expect(response.body).toHaveProperty('token');
+  });
   it('it should be return a user created fail', async () => {
     const response = await request(Application.express)
       .post('/user/create')
