@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 // Controllers imports
-import welcomeController from '@controllers/welcomeController';
+import welcomeController from '@controllers/welcome-controller';
 
 const route: Router = Router();
 

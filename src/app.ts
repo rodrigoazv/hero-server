@@ -1,6 +1,5 @@
 import express from 'express';
 import { createConnection } from 'typeorm';
-// iuse
 
 export class Application {
   public express: express.Application;
