@@ -1,5 +1,5 @@
 import express from 'express';
-
+import { createConnection } from 'typeorm';
 // iuse
 
 export class Application {
@@ -24,9 +24,17 @@ export class Application {
     this.express.use(require('./routes'));
   }
 
-  public Setup(): void {
-    this.express.listen(3333);
-  }
+  setupDbAndServer = async () => {
+    try {
+      await createConnection();
+    } catch (err) {
+      console.error({
+        sucess: false,
+        log: err,
+        message: 'database connect fail',
+      });
+    }
+  };
 }
 
-export default new Application();
+export default new Application().express.listen(process.env.PORT || 3333);
