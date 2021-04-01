@@ -1,7 +1,7 @@
 import express from 'express';
 import { createConnection } from 'typeorm';
 
-export class Application {
+class Application {
   public express: express.Application;
 
   public constructor() {
@@ -26,6 +26,7 @@ export class Application {
   setupDbAndServer = async () => {
     try {
       await createConnection();
+      this.express.listen(3333);
     } catch (err) {
       console.error({
         sucess: false,
@@ -35,5 +36,4 @@ export class Application {
     }
   };
 }
-
-export default new Application().express.listen(process.env.PORT || 3333);
+export default new Application();
