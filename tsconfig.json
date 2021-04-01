@@ -12,6 +12,7 @@
       "baseUrl": ".",
       "paths": {
         "@controllers/*": ["./src/controllers/*"],
+        "@entitys/*": ["./src/entitys/*"],
       },
       "outDir": "./dist",
       "moduleResolution": "node",
