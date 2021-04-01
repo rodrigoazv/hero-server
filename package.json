@@ -15,7 +15,9 @@
     "dev:server": "NODE_ENV=test ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/index.ts",
     "migration:generate": "ts-node -r dotenv/config ./node_modules/typeorm/cli.js migration:generate --name",
     "migration:run": "ts-node -r dotenv/config ./node_modules/typeorm/cli.js migration:run",
-    "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
+    "test:migration:generate": "NODE_ENV=test ts-node -r dotenv/config ./node_modules/typeorm/cli.js migration:generate --name",
+    "test:migration:run": "NODE_ENV=test ts-node -r dotenv/config ./node_modules/typeorm/cli.js migration:run",
+    "build": "tsc",
     "test": "jest",
     "lint": "eslint src --ext ts"
   },
@@ -24,6 +26,7 @@
     "@commitlint/config-conventional": "^12.0.1",
     "@types/express": "^4.17.11",
     "@types/jest": "^26.0.22",
+    "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
     "babel-eslint": "^10.1.0",
@@ -37,12 +40,15 @@
     "husky": "^4.3.0",
     "jest": "^26.6.3",
     "prettier": "^2.2.1",
+    "supertest": "^6.1.3",
     "ts-jest": "^26.5.4",
     "ts-node-dev": "^1.1.6",
     "typescript": "^4.2.3"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "pg": "^8.5.1",
+    "typeorm": "^0.2.32"
   },
   "config": {
     "commitizen": {
