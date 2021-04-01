@@ -1,8 +1,14 @@
 import { Request, Response } from 'express';
 import User from '@entitys/user';
 import UserService from '@service/user-service';
-
+/* Controller for create/update/exclude user
+ *you need to create an instance and call some method on the route
+ */
 class UserController {
+  /* Method { @Post } for create user
+   *recive request of User type
+   *return token if user is created (Todo)
+   */
   public async create(req: Request, res: Response): Promise<any> {
     const userService = new UserService();
     try {
