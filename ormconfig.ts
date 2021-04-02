@@ -10,7 +10,7 @@ module.exports = {
     entitiesDir: 'src/entity',
     subscribersDir: 'src/subscriber',
   },
-  entities: ['src/entity/**/*.ts'],
+  entities: ['src/entitys/**/*.ts'],
 
   migrations: ['src/migrations/**/*.ts'],
 };

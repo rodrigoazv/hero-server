@@ -1,39 +1,22 @@
 import express from 'express';
-import { createConnection } from 'typeorm';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import { errorHandler } from './helpers/error';
+import routes from './routes';
 
-class Application {
-  public express: express.Application;
+const app = express();
+// at the suggestion of the eslint documentation,
+// when the require module has a very specific use,
+// it disables the module in the line
+// eslint-disable-next-line global-require
+app.use(bodyParser.json());
+app.use(routes);
 
-  public constructor() {
-    this.express = express();
-    this.middlewares();
-    this.routes();
-  }
+app.use(cors());
 
-  private middlewares() {
-    this.express.use(express.json());
-    this.express.use(express.urlencoded({ extended: true }));
-  }
+app.use(bodyParser.urlencoded({ extended: true }));
 
-  private routes(): void {
-    // at the suggestion of the eslint documentation,
-    // when the require module has a very specific use,
-    // it disables the module in the line
-    // eslint-disable-next-line global-require
-    this.express.use(require('./routes'));
-  }
+// eslint-disable-next-line no-unused-vars
+app.use(errorHandler);
 
-  setupDbAndServer = async () => {
-    try {
-      await createConnection();
-      this.express.listen(3333);
-    } catch (err) {
-      console.error({
-        sucess: false,
-        log: err,
-        message: 'database connect fail',
-      });
-    }
-  };
-}
-export default new Application();
+export default app;

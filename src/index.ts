@@ -1,3 +1,8 @@
-import Application from './app';
+import { createConnection } from 'typeorm';
+import app from './app';
 
-Application.setupDbAndServer();
+const port = 3333;
+
+createConnection().then(() =>
+  app.listen(port, () => console.log(`Running on http://localhost:${port}`)),
+);
