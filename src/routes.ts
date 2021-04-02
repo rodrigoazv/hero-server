@@ -3,13 +3,15 @@ import { Router } from 'express';
 // Controllers imports
 import userController from '@controllers/user-controller';
 import authController from '@controllers/auth-controller';
+// Middleware imports
+import verifyHandle from './middlewares/verify-token-handler';
 
-const route: Router = Router();
+const router = Router();
 // User routes
-route.post('/user/create', userController.create);
-route.put('/user/update', userController.update);
+router.post('/user/create', userController.create);
+router.put('/user/update', userController.update);
+router.get('/user/:id', verifyHandle, userController.indexUserById);
 // Auth routes
-route.post('/user/login', authController.login);
+router.post('/user/login', authController.login);
 // Comics protected routes
-
-module.exports = route;
+export default router;
