@@ -15,7 +15,7 @@ export interface CreateUser {
   firstName: string;
   lastName: string;
   nickName: string;
-  birthDay: Date;
+  birthDay: string;
 }
 
 const schema = {
@@ -27,9 +27,16 @@ const schema = {
       firstName: { type: 'string' },
       lastName: { type: 'string' },
       nickName: { type: 'string' },
-      birthDay: { type: 'date' },
+      birthDay: { type: 'string' },
     },
-    required: ['email', 'password'],
+    required: [
+      'email',
+      'password',
+      'firstName',
+      'lastName',
+      'nickName',
+      'birthDay',
+    ],
   },
   userRequest: {
     type: 'object',
@@ -50,7 +57,7 @@ const schema = {
 
 // eslint-disable-next-line import/prefer-default-export
 export function createUserValidator(body: any) {
-  validator(schema.userRequest, body);
+  validator(schema.userCreate, body);
 }
 export function loginUserValidator(body: any) {
   validator(schema.userRequest, body);

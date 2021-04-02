@@ -2,13 +2,13 @@
 import { Request, Response, NextFunction } from 'express';
 import User from '@entitys/user';
 import UserService from '@service/user-service';
+import { NotFound } from '../helpers/error';
 import {
   updateUserValidator,
   UpdateUser,
   createUserValidator,
   CreateUser,
-} from 'src/schemas/user';
-import { NotFound } from 'src/helpers/error';
+} from '../schemas/user';
 
 /* Controller for create/update/exclude user
  *you need to create an instance and call some method on the route

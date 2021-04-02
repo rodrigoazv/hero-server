@@ -2,6 +2,8 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
+export class AuthFail extends Error {}
+
 export default function verifyToken(
   req: Request,
   res: Response,
@@ -9,10 +11,7 @@ export default function verifyToken(
 ) {
   const pickToken = <string>req.header('authorization');
   if (!pickToken) {
-    return res.status(403).json({
-      auth: false,
-      err: 'no token',
-    });
+    throw new AuthFail('no token');
   }
   try {
     jwt.verify(
@@ -20,10 +19,7 @@ export default function verifyToken(
       process.env.SECRET_KEY || 'authorization',
       (err: any, result: any) => {
         if (err) {
-          return res.status(404).json({
-            auth: false,
-            message: 'invalid token',
-          });
+          throw new AuthFail('invalid token');
         }
         if (!err) {
           req.userId = result.id;

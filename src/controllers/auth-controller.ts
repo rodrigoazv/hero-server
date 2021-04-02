@@ -2,7 +2,7 @@
 import { NextFunction, Request, Response } from 'express';
 import AuthService from '@service/auth-service';
 import { NotFound } from '../helpers/error';
-import AuthHandler from '../helpers/auth-handler';
+import generateToken from '../helpers/auth-handler';
 import { loginUserValidator, UserRequest } from '../schemas/user';
 
 /* Controller for auth
@@ -20,7 +20,6 @@ class AuthController {
     next: NextFunction,
   ): Promise<any> {
     const authService = new AuthService();
-    const authHandler = new AuthHandler();
     try {
       loginUserValidator(req.body);
       const content = req.body as UserRequest;
@@ -30,7 +29,7 @@ class AuthController {
         throw new NotFound('User not found');
       }
       // Call to util authHandler, to generateToken
-      const token: string = authHandler.generateToken(user);
+      const token: string = generateToken(user);
       return res.status(200).json({
         sucess: true,
         token,
