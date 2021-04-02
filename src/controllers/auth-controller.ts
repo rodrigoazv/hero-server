@@ -2,7 +2,7 @@
 import { NextFunction, Request, Response } from 'express';
 import AuthService from '@service/auth-service';
 import { NotFound } from '../helpers/error';
-import AuthHandler from '../utils/auth-handler';
+import AuthHandler from '../helpers/auth-handler';
 import { loginUserValidator, UserRequest } from '../schemas/user';
 
 /* Controller for auth
