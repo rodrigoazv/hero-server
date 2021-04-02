@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import AuthService from '@service/auth-service';
 import { NotFound } from '../helpers/error';
 import AuthHandler from '../utils/auth-handler';
-import { createUserValidator, UserRequest } from '../schemas/user';
+import { loginUserValidator, UserRequest } from '../schemas/user';
 
 /* Controller for auth
  *you need to create an instance and call some method on the route
@@ -22,7 +22,7 @@ class AuthController {
     const authService = new AuthService();
     const authHandler = new AuthHandler();
     try {
-      createUserValidator(req.body);
+      loginUserValidator(req.body);
       const content = req.body as UserRequest;
       const user = await authService.getByEmail(content.email);
 
