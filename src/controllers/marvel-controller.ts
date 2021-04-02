@@ -58,10 +58,19 @@ class MarvelController {
     next: NextFunction,
   ): Promise<any> {
     try {
-      const { limit, offset } = req.body;
+      const { limit, offset, nameStartsWith } = req.body;
       const resp = await axios.get(
         `http://gateway.marvel.com/v1/public/characters?ts=${process.env.MARVEL_TIMESTAMP}&apikey=${process.env.MARVEL_PUBLIC}&hash=${process.env.MARVEL_HASH}&limit=${limit}&offset=${offset}`,
       );
+      if (nameStartsWith) {
+        const respSearch = await axios.get(
+          `http://gateway.marvel.com/v1/public/characters?ts=${process.env.MARVEL_TIMESTAMP}&apikey=${process.env.MARVEL_PUBLIC}&hash=${process.env.MARVEL_HASH}&limit=${limit}&offset=${offset}&nameStartsWith=${nameStartsWith}`,
+        );
+        return res.status(200).json({
+          success: true,
+          data: respSearch.data,
+        });
+      }
       return res.status(200).json({
         success: true,
         data: resp.data,
@@ -80,10 +89,19 @@ class MarvelController {
     next: NextFunction,
   ): Promise<any> {
     try {
-      const { limit, offset } = req.body;
+      const { limit, offset, titleStartsWith } = req.body;
       const resp = await axios.get(
         `http://gateway.marvel.com/v1/public/comics?ts=${process.env.MARVEL_TIMESTAMP}&apikey=${process.env.MARVEL_PUBLIC}&hash=${process.env.MARVEL_HASH}&limit=${limit}&offset=${offset}`,
       );
+      if (titleStartsWith) {
+        const respSearch = await axios.get(
+          `http://gateway.marvel.com/v1/public/comics?ts=${process.env.MARVEL_TIMESTAMP}&apikey=${process.env.MARVEL_PUBLIC}&hash=${process.env.MARVEL_HASH}&limit=${limit}&offset=${offset}&titleStartsWith=${titleStartsWith}`,
+        );
+        return res.status(200).json({
+          success: true,
+          data: respSearch.data,
+        });
+      }
       return res.status(200).json({
         success: true,
         data: resp.data,
