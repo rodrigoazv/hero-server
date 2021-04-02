@@ -22,7 +22,7 @@ describe('Marvel get tests', () => {
     token = resp.body.token;
   });
 
-  it('it should be return a data with char ', async () => {
+  it('it should be return a data with list of char ', async () => {
     const response = await request(app)
       .get('/char/index')
       .send({
@@ -32,14 +32,29 @@ describe('Marvel get tests', () => {
       .set({ Authorization: token });
     expect(response.body).toHaveProperty('data');
   });
-
-  it('it should be return a data with comics ', async () => {
+  it('it should be return a data with list of comics ', async () => {
     const response = await request(app)
       .get('/comics/index')
       .send({
         limit: 1,
         offset: 1,
       })
+      .set({ Authorization: token });
+    expect(response.body).toHaveProperty('data');
+  });
+
+  it('it should be return a data with char ', async () => {
+    const response = await request(app)
+      .get('/char/index/1017100')
+      .send()
+      .set({ Authorization: token });
+    expect(response.body).toHaveProperty('data');
+  });
+
+  it('it should be return a data with comics ', async () => {
+    const response = await request(app)
+      .get('/comics/index/82965')
+      .send()
       .set({ Authorization: token });
     expect(response.body).toHaveProperty('data');
   });
