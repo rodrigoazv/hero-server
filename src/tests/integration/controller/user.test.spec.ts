@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import request from 'supertest';
 import { createConnection } from 'typeorm';
-import Application from '../../../app';
+import app from '../../../app';
 
 describe('User CRUD tests', () => {
   beforeAll(async () => {
@@ -9,7 +9,7 @@ describe('User CRUD tests', () => {
   });
 
   it('it should be return a user created', async () => {
-    const response = await request(Application.express)
+    const response = await request(app)
       .post('/user/create')
       .send({
         firstName: 'Rodrigo',
@@ -23,7 +23,7 @@ describe('User CRUD tests', () => {
   });
 
   it('should be return a user if uptade status ok', async () => {
-    const response = await request(Application.express)
+    const response = await request(app)
       .put('/user/update')
       .send({
         email: 'rodrigo@gmail.com',
@@ -33,7 +33,7 @@ describe('User CRUD tests', () => {
   });
 
   it('should be return a token if login status ok', async () => {
-    const response = await request(Application.express)
+    const response = await request(app)
       .post('/user/login')
       .send({
         password: '123456',
@@ -43,7 +43,7 @@ describe('User CRUD tests', () => {
   });
 
   it('it should be return a user created fail', async () => {
-    const response = await request(Application.express)
+    const response = await request(app)
       .post('/user/create')
       .send({
         firstName: 'Rodrigo',
