@@ -32,15 +32,19 @@ export default class UserService {
     return userSaved;
   }
 
+  async getByIdProtected(id: string){
+    const user = this.userRepository
+      .createQueryBuilder('user')
+      .where('user.id = :id', { id })
+      .getOne();
+    return user;
+  };
+
   async getByEmailProtected(email: string): Promise<User | any> {
-    try {
-      const user = this.userRepository
-        .createQueryBuilder('user')
-        .where('user.email = :email', { email })
-        .getOne();
-      return user;
-    } catch (err) {
-      return err;
-    }
+    const user = this.userRepository
+      .createQueryBuilder('user')
+      .where('user.email = :email', { email })
+      .getOne();
+    return user;
   }
 }

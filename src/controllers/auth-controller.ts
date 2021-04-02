@@ -1,8 +1,10 @@
+/* eslint-disable consistent-return */
 import { NextFunction, Request, Response } from 'express';
 import AuthService from '@service/auth-service';
 import { NotFound } from '../helpers/error';
 import AuthHandler from '../utils/auth-handler';
 import { createUserValidator, UserRequest } from '../schemas/user';
+
 /* Controller for auth
  *you need to create an instance and call some method on the route
  */
@@ -12,7 +14,6 @@ class AuthController {
    *return token if user exist
    */
 
-  // eslint-disable-next-line consistent-return
   public async login(
     req: Request,
     res: Response,
