@@ -14,9 +14,9 @@ export class NotFound extends Error {}
 // eslint-disable-next-line consistent-return
 export async function errorHandler(
   error: Error,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction,
+  _next: NextFunction,
 ) {
   console.error(error);
   let errorBody: ErrorType = {
