@@ -16,6 +16,8 @@ router.get('/user/:id', verifyHandle, userController.indexUserById);
 router.post('/user/login', authController.login);
 // Char protected routes
 router.get('/char/index', verifyHandle, marvelController.indexChar);
+router.get('/char/index/:id', verifyHandle, marvelController.indexCharById);
 // Comics protected routes
 router.get('/comics/index', verifyHandle, marvelController.indexComics);
+router.get('/comics/index/:id', verifyHandle, marvelController.indexComicsById);
 export default router;
