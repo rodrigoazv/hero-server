@@ -2,7 +2,9 @@
 import { Request, Response, NextFunction } from 'express';
 import User from '@entitys/user';
 import UserService from '@service/user-service';
+import AuthService from '@service/auth-service';
 import { NotFound } from '../helpers/error';
+import generateToken from '../helpers/auth-handler';
 import {
   updateUserValidator,
   UpdateUser,
@@ -48,6 +50,7 @@ class UserController {
     next: NextFunction,
   ): Promise<any> {
     const userService = new UserService();
+    const authService = new AuthService();
     const userNew = new User();
     try {
       createUserValidator(req.body);
@@ -60,12 +63,12 @@ class UserController {
       userNew.birthDay = new Date(content.birthDay);
       /* Service call to insert one user
        */
-      const userCreated = await userService.insertOne(userNew);
+      await userService.insertOne(userNew);
+      const user = await authService.getByEmail(userNew.email);
+      const tokenJwt: string = generateToken(user);
       return res.status(200).json({
         sucess: true,
-        user: {
-          userCreated,
-        },
+        token: tokenJwt,
       });
     } catch (error) {
       next(error);
