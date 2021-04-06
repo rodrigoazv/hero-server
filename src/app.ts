@@ -4,7 +4,7 @@ import cors from 'cors';
 import { errorHandler } from './helpers/error';
 import routes from './routes';
 
-const whitelist = ['http://localhost:3000'];
+const whitelist = ['http://localhost:3000', 'http://localhost', '*'];
 const corsOptions = {
   origin(origin: any, callback: any) {
     if (whitelist.indexOf(origin) !== -1) {
@@ -16,7 +16,7 @@ const corsOptions = {
 };
 
 const app = express();
-app.use(cors(corsOptions));
+app.use(cors());
 // at the suggestion of the eslint documentation,
 // when the require module has a very specific use,
 // it disables the module in the line
