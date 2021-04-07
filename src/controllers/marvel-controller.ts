@@ -20,7 +20,7 @@ class MarvelController {
       );
       return res.status(200).json({
         success: true,
-        data: resp.data,
+        char: resp.data.data,
       });
     } catch (error) {
       next(error);
@@ -42,7 +42,7 @@ class MarvelController {
       );
       return res.status(200).json({
         success: true,
-        data: resp.data,
+        comics: resp.data.data,
       });
     } catch (error) {
       next(error);
@@ -101,7 +101,7 @@ class MarvelController {
         );
         return res.status(200).json({
           success: true,
-          data: respSearch.data,
+          comics: respSearch.data.data,
         });
       }
       return res.status(200).json({

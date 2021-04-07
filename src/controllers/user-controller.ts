@@ -65,10 +65,11 @@ class UserController {
        */
       await userService.insertOne(userNew);
       const user = await authService.getByEmail(userNew.email);
-      const tokenJwt: string = generateToken(user);
+      const token: string = generateToken(user);
+      res.cookie('authorization', token);
       return res.status(200).json({
         sucess: true,
-        token: tokenJwt,
+        token,
       });
     } catch (error) {
       next(error);
