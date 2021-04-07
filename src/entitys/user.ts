@@ -1,5 +1,15 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  BeforeInsert,
+  OneToMany,
+  JoinColumn,
+} from 'typeorm';
 import bcrypt from 'bcrypt';
+
+import Comics from './comics';
+import Char from './char';
 
 @Entity()
 export default class User {
@@ -23,6 +33,15 @@ export default class User {
 
   @Column()
   birthDay: Date;
+
+  @OneToMany(() => Comics, (favorit) => favorit.user)
+  favoritsComic: Comics[];
+
+  @OneToMany(() => Char, (favorit) => favorit.user, {
+    cascade: true,
+  })
+  @JoinColumn()
+  favoritsChar: Char[];
 
   async setPassword(newPassword: string) {
     this.password = await bcrypt.hash(newPassword, 10);

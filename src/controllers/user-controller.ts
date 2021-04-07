@@ -1,9 +1,13 @@
 /* eslint-disable consistent-return */
 import { Request, Response, NextFunction } from 'express';
 import User from '@entitys/user';
+import Char from '@entitys/char';
+// import Comics from '@entitys/comics';
 import UserService from '@service/user-service';
 import AuthService from '@service/auth-service';
 import { AuthFail } from 'src/middlewares/verify-token-handler';
+import axios from 'axios';
+import CharService from '@service/marvel-service';
 import { NotFound } from '../helpers/error';
 import generateToken from '../helpers/auth-handler';
 import {
@@ -11,6 +15,7 @@ import {
   ValidFiedlUser,
   createUserValidator,
   CreateUser,
+  LikeCharComics,
 } from '../schemas/user';
 
 /* Controller for create/update/exclude user
@@ -35,6 +40,48 @@ class UserController {
         user: {
           user,
         },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /* Method { @Get } for pick user
+   *recive request of User type
+   *return token if user is created (Todo)
+   */
+  public async likeChar(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<any> {
+    const userService = new UserService();
+    const charService = new CharService();
+    const char = new Char();
+    try {
+      const content = req.body as LikeCharComics;
+      const resp = await axios.get(
+        `http://gateway.marvel.com/v1/public/characters/${content.id}?ts=${process.env.MARVEL_TIMESTAMP}&apikey=${process.env.MARVEL_PUBLIC}&hash=${process.env.MARVEL_HASH}`,
+      );
+      if (resp.data.data.results.length < 1) {
+        throw new NotFound('No char find');
+      }
+      const userOld: User = await userService.getByIdProtected(req.userId);
+      const isAlreadyLike = userOld.favoritsChar.find(
+        (charMapped) => charMapped.charId.toString() === content.id.toString(),
+      );
+      if (isAlreadyLike) {
+        throw new NotFound('Already liked');
+      }
+      char.charId = content.id;
+      char.charName = content.name;
+      char.charThumb = content.thumb;
+      char.user = userOld;
+      const newChar = await charService.insertOne(char);
+      await userService.updateUserChars(newChar);
+
+      return res.status(200).json({
+        sucess: true,
       });
     } catch (error) {
       next(error);

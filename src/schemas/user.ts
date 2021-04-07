@@ -14,6 +14,12 @@ export interface ValidFiedlUser {
   nickName: string;
 }
 
+export interface LikeCharComics {
+  id: string;
+  name: string;
+  thumb: string;
+}
+
 export interface CreateUser {
   email: string;
   password: string;

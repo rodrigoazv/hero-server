@@ -11,7 +11,8 @@ const router = Router();
 // User routes
 router.post('/user/create', userController.create);
 router.put('/user/update', userController.update);
-router.get('/user/:id', verifyHandle, userController.indexUserById);
+router.get('/user/:id', userController.indexUserById);
+router.post('/like/char', verifyHandle, userController.likeChar);
 // Auth routes
 router.post('/user/login', authController.login);
 // Char protected routes

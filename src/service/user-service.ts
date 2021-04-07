@@ -1,6 +1,7 @@
 import { getManager, Repository } from 'typeorm';
 
 import User from '@entitys/user';
+import Char from '@entitys/char';
 
 export default class UserService {
   userRepository: Repository<User>;
@@ -32,11 +33,22 @@ export default class UserService {
     return userSaved;
   }
 
-  async getByIdProtected(id: string) {
-    const user = this.userRepository
-      .createQueryBuilder('user')
-      .where('user.id = :id', { id })
-      .getOne();
+  async updateUserChars(char: Char) {
+    const userSaved = await this.userRepository
+      .createQueryBuilder()
+      .relation(User, 'favoritsChar')
+      .of(User)
+      .add(char);
+    return userSaved;
+  }
+
+  async getByIdProtected(id: string): Promise<User | any> {
+    const user = this.userRepository.findOneOrFail({
+      where: {
+        id,
+      },
+      relations: ['favoritsChar', 'favoritsComic'],
+    });
     return user;
   }
 
@@ -49,6 +61,14 @@ export default class UserService {
   }
 
   async getByNickProtected(nickName: string): Promise<User | any> {
+    const user = this.userRepository
+      .createQueryBuilder('user')
+      .where('user.nickName = :nickName', { nickName })
+      .getOne();
+    return user;
+  }
+
+  async setLikeChar(nickName: string): Promise<User | any> {
     const user = this.userRepository
       .createQueryBuilder('user')
       .where('user.nickName = :nickName', { nickName })
