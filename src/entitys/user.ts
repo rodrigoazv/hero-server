@@ -15,10 +15,10 @@ export default class User {
   @Column({ select: false })
   password: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ unique: true })
   nickName: string;
 
   @Column()
