@@ -3,11 +3,12 @@ import { Request, Response, NextFunction } from 'express';
 import User from '@entitys/user';
 import UserService from '@service/user-service';
 import AuthService from '@service/auth-service';
+import { AuthFail } from 'src/middlewares/verify-token-handler';
 import { NotFound } from '../helpers/error';
 import generateToken from '../helpers/auth-handler';
 import {
   updateUserValidator,
-  UpdateUser,
+  ValidFiedlUser,
   createUserValidator,
   CreateUser,
 } from '../schemas/user';
@@ -63,7 +64,19 @@ class UserController {
       userNew.birthDay = new Date(content.birthDay);
       /* Service call to insert one user
        */
+      const userByNick = await userService.getByNickProtected(content.nickName);
+
+      if (userByNick) {
+        throw new AuthFail('NickName already exist');
+      }
+
+      const userByEmail = await userService.getByEmailProtected(content.email);
+      if (userByEmail) {
+        throw new AuthFail('Email already exist');
+      }
+
       await userService.insertOne(userNew);
+
       const user = await authService.getByEmail(userNew.email);
       const token: string = generateToken(user);
       res.cookie('authorization', token);
@@ -88,7 +101,7 @@ class UserController {
     const userService = new UserService();
     try {
       updateUserValidator(req.body);
-      const content = req.body as UpdateUser;
+      const content = req.body as ValidFiedlUser;
       const userOld = await userService.getByEmailProtected(content.email);
       if (!userOld) {
         throw new NotFound('User not found');

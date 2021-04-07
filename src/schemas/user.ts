@@ -9,6 +9,11 @@ export interface UpdateUser {
   email: string;
 }
 
+export interface ValidFiedlUser {
+  email: string;
+  nickName: string;
+}
+
 export interface CreateUser {
   email: string;
   password: string;

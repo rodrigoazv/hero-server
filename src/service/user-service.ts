@@ -32,18 +32,26 @@ export default class UserService {
     return userSaved;
   }
 
-  async getByIdProtected(id: string){
+  async getByIdProtected(id: string) {
     const user = this.userRepository
       .createQueryBuilder('user')
       .where('user.id = :id', { id })
       .getOne();
     return user;
-  };
+  }
 
   async getByEmailProtected(email: string): Promise<User | any> {
     const user = this.userRepository
       .createQueryBuilder('user')
       .where('user.email = :email', { email })
+      .getOne();
+    return user;
+  }
+
+  async getByNickProtected(nickName: string): Promise<User | any> {
+    const user = this.userRepository
+      .createQueryBuilder('user')
+      .where('user.nickName = :nickName', { nickName })
       .getOne();
     return user;
   }

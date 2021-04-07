@@ -26,12 +26,13 @@ class AuthController {
       loginUserValidator(req.body);
       const content = req.body as UserRequest;
       const user = await authService.getByEmail(content.email);
-      const passOk = await bcrypt.compare(content.password, user.password);
-      if (passOk) {
-        throw new AuthFail('Invalid pass');
-      }
       if (!user) {
         throw new NotFound('User not found');
+      }
+      const passOk = await bcrypt.compare(content.password, user.password);
+
+      if (!passOk) {
+        throw new AuthFail('Invalid pass');
       }
       // Call to util authHandler, to generateToken
       const token: string = generateToken(user);
