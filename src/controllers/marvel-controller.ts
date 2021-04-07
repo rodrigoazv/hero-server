@@ -20,7 +20,7 @@ class MarvelController {
       );
       return res.status(200).json({
         success: true,
-        data: resp.data,
+        char: resp.data.data,
       });
     } catch (error) {
       next(error);
@@ -42,7 +42,7 @@ class MarvelController {
       );
       return res.status(200).json({
         success: true,
-        data: resp.data,
+        comics: resp.data.data,
       });
     } catch (error) {
       next(error);
@@ -58,22 +58,23 @@ class MarvelController {
     next: NextFunction,
   ): Promise<any> {
     try {
-      const { limit, offset, nameStartsWith } = req.body;
+      const { limit, offset } = req.params;
+      const { search } = req.query;
       const resp = await axios.get(
         `http://gateway.marvel.com/v1/public/characters?ts=${process.env.MARVEL_TIMESTAMP}&apikey=${process.env.MARVEL_PUBLIC}&hash=${process.env.MARVEL_HASH}&limit=${limit}&offset=${offset}`,
       );
-      if (nameStartsWith) {
+      if (search) {
         const respSearch = await axios.get(
-          `http://gateway.marvel.com/v1/public/characters?ts=${process.env.MARVEL_TIMESTAMP}&apikey=${process.env.MARVEL_PUBLIC}&hash=${process.env.MARVEL_HASH}&limit=${limit}&offset=${offset}&nameStartsWith=${nameStartsWith}`,
+          `http://gateway.marvel.com/v1/public/characters?ts=${process.env.MARVEL_TIMESTAMP}&apikey=${process.env.MARVEL_PUBLIC}&hash=${process.env.MARVEL_HASH}&limit=${limit}&offset=${offset}&nameStartsWith=${search}`,
         );
         return res.status(200).json({
           success: true,
-          data: respSearch.data,
+          char: respSearch.data.data,
         });
       }
       return res.status(200).json({
         success: true,
-        data: resp.data,
+        char: resp.data.data,
       });
     } catch (error) {
       next(error);
@@ -89,22 +90,23 @@ class MarvelController {
     next: NextFunction,
   ): Promise<any> {
     try {
-      const { limit, offset, titleStartsWith } = req.body;
+      const { limit, offset } = req.params;
+      const { search } = req.query;
       const resp = await axios.get(
         `http://gateway.marvel.com/v1/public/comics?ts=${process.env.MARVEL_TIMESTAMP}&apikey=${process.env.MARVEL_PUBLIC}&hash=${process.env.MARVEL_HASH}&limit=${limit}&offset=${offset}`,
       );
-      if (titleStartsWith) {
+      if (search) {
         const respSearch = await axios.get(
-          `http://gateway.marvel.com/v1/public/comics?ts=${process.env.MARVEL_TIMESTAMP}&apikey=${process.env.MARVEL_PUBLIC}&hash=${process.env.MARVEL_HASH}&limit=${limit}&offset=${offset}&titleStartsWith=${titleStartsWith}`,
+          `http://gateway.marvel.com/v1/public/comics?ts=${process.env.MARVEL_TIMESTAMP}&apikey=${process.env.MARVEL_PUBLIC}&hash=${process.env.MARVEL_HASH}&limit=${limit}&offset=${offset}&titleStartsWith=${search}`,
         );
         return res.status(200).json({
           success: true,
-          data: respSearch.data,
+          comics: respSearch.data.data,
         });
       }
       return res.status(200).json({
         success: true,
-        data: resp.data,
+        comics: resp.data.data,
       });
     } catch (error) {
       next(error);

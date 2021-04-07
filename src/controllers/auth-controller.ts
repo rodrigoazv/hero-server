@@ -1,6 +1,8 @@
 /* eslint-disable consistent-return */
 import { NextFunction, Request, Response } from 'express';
 import AuthService from '@service/auth-service';
+import bcrypt from 'bcrypt';
+import { AuthFail } from 'src/middlewares/verify-token-handler';
 import { NotFound } from '../helpers/error';
 import generateToken from '../helpers/auth-handler';
 import { loginUserValidator, UserRequest } from '../schemas/user';
@@ -24,12 +26,16 @@ class AuthController {
       loginUserValidator(req.body);
       const content = req.body as UserRequest;
       const user = await authService.getByEmail(content.email);
-
+      const passOk = await bcrypt.compare(content.password, user.password);
+      if (passOk) {
+        throw new AuthFail('Invalid pass');
+      }
       if (!user) {
         throw new NotFound('User not found');
       }
       // Call to util authHandler, to generateToken
       const token: string = generateToken(user);
+      res.cookie('authorization', token);
       return res.status(200).json({
         sucess: true,
         token,
