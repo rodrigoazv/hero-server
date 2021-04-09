@@ -15,9 +15,11 @@ export interface ValidFiedlUser {
 }
 
 export interface LikeCharComics {
+  type: 'characters' | 'comics';
   id: string;
   name: string;
   thumb: string;
+  like: boolean;
 }
 
 export interface CreateUser {

@@ -16,9 +16,17 @@ export default class CharService {
     return this.charRepository.create(data);
   }
 
-  async insertOne(data: Char) {
-    const newChar = this.charRepository.create(data);
-    const charSaved = await this.charRepository.save(newChar);
-    return charSaved;
+  async insertOne(data: Char, like: boolean) {
+    const { charName, user } = data;
+    if (!like) {
+      const newChar = this.charRepository.create(data);
+      const charSaved = await this.charRepository.save(newChar);
+      return charSaved;
+    }
+    const deletechar = this.charRepository.delete({
+      charName,
+      user,
+    });
+    return deletechar;
   }
 }

@@ -2,12 +2,14 @@
 import { Request, Response, NextFunction } from 'express';
 import User from '@entitys/user';
 import Char from '@entitys/char';
-// import Comics from '@entitys/comics';
+
 import UserService from '@service/user-service';
 import AuthService from '@service/auth-service';
 import { AuthFail } from 'src/middlewares/verify-token-handler';
 import axios from 'axios';
-import CharService from '@service/marvel-service';
+import CharService from '@service/char-service';
+import ComicService from '@service/comic-service';
+import Comic from '@entitys/comics';
 import { NotFound } from '../helpers/error';
 import generateToken from '../helpers/auth-handler';
 import {
@@ -23,8 +25,8 @@ import {
  */
 class UserController {
   /* Method { @Get } for pick user
-   *recive request of User type
-   *return token if user is created (Todo)
+   *recive request of UserId type
+   *return token if user is created
    */
   public async indexUserById(
     req: Request,
@@ -33,7 +35,7 @@ class UserController {
   ): Promise<any> {
     const userService = new UserService();
     try {
-      const user = await userService.getByIdProtected(req.params.id);
+      const user = await userService.getByIdProtected(req.userId);
 
       return res.status(200).json({
         sucess: true,
@@ -46,39 +48,44 @@ class UserController {
     }
   }
 
-  /* Method { @Get } for pick user
-   *recive request of User type
-   *return token if user is created (Todo)
+  /* Method { @POST } for like char or comic
+   *recive request of Char type
+   *return token if char like by user
    */
-  public async likeChar(
+  public async likeCharComic(
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<any> {
     const userService = new UserService();
     const charService = new CharService();
+    const comicService = new ComicService();
     const char = new Char();
+    const comic = new Comic();
     try {
       const content = req.body as LikeCharComics;
       const resp = await axios.get(
-        `http://gateway.marvel.com/v1/public/characters/${content.id}?ts=${process.env.MARVEL_TIMESTAMP}&apikey=${process.env.MARVEL_PUBLIC}&hash=${process.env.MARVEL_HASH}`,
+        `http://gateway.marvel.com/v1/public/${content.type}/${content.id}?ts=${process.env.MARVEL_TIMESTAMP}&apikey=${process.env.MARVEL_PUBLIC}&hash=${process.env.MARVEL_HASH}`,
       );
       if (resp.data.data.results.length < 1) {
-        throw new NotFound('No char find');
+        throw new NotFound('No char or comic find');
       }
+
       const userOld: User = await userService.getByIdProtected(req.userId);
-      const isAlreadyLike = userOld.favoritsChar.find(
-        (charMapped) => charMapped.charId.toString() === content.id.toString(),
-      );
-      if (isAlreadyLike) {
-        throw new NotFound('Already liked');
+
+      if (content.type === 'characters') {
+        char.charId = content.id;
+        char.charName = content.name;
+        char.charThumb = content.thumb;
+        char.user = userOld;
+        await charService.insertOne(char, content.like);
+      } else if (content.type === 'comics') {
+        comic.comicId = content.id;
+        comic.comicName = content.name;
+        comic.comicThumb = content.thumb;
+        comic.user = userOld;
+        await comicService.insertOne(comic, content.like);
       }
-      char.charId = content.id;
-      char.charName = content.name;
-      char.charThumb = content.thumb;
-      char.user = userOld;
-      const newChar = await charService.insertOne(char);
-      await userService.updateUserChars(newChar);
 
       return res.status(200).json({
         sucess: true,

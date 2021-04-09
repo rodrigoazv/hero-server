@@ -12,7 +12,7 @@ const router = Router();
 router.post('/user/create', userController.create);
 router.put('/user/update', userController.update);
 router.get('/user/:id', userController.indexUserById);
-router.post('/like/char', verifyHandle, userController.likeChar);
+router.post('/like/charOrComic', verifyHandle, userController.likeCharComic);
 // Auth routes
 router.post('/user/login', authController.login);
 // Char protected routes

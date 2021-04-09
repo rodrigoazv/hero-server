@@ -2,6 +2,7 @@ import { getManager, Repository } from 'typeorm';
 
 import User from '@entitys/user';
 import Char from '@entitys/char';
+import Comic from '@entitys/comics';
 
 export default class UserService {
   userRepository: Repository<User>;
@@ -34,12 +35,19 @@ export default class UserService {
   }
 
   async updateUserChars(char: Char) {
-    const userSaved = await this.userRepository
-      .createQueryBuilder()
-      .relation(User, 'favoritsChar')
-      .of(User)
-      .add(char);
-    return userSaved;
+    const favoritChar = await this.userRepository.findOne(char.user.id, {
+      relations: ['favoritsChar'],
+    });
+    favoritChar?.favoritsChar.push(char);
+    return favoritChar;
+  }
+
+  async updateUserComics(comic: Comic) {
+    const favoritComic = await this.userRepository.findOne(comic.user.id, {
+      relations: ['favoritsComic'],
+    });
+    favoritComic?.favoritsComic.push(comic);
+    return favoritComic;
   }
 
   async getByIdProtected(id: string): Promise<User | any> {
