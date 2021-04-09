@@ -19,7 +19,7 @@ export default function verifyToken(
       process.env.SECRET_KEY || 'authorization',
       (err: any, result: any) => {
         if (err) {
-          throw new AuthFail('invalid token');
+          throw new AuthFail('Token is not valid');
         }
         if (!err) {
           req.userId = result.id;

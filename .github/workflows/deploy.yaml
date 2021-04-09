@@ -10,6 +10,7 @@ on:
   pull_request:
     branches: [ master, develop ]
 
+
 jobs:
   build:
 
@@ -27,4 +28,3 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: yarn
     - run: yarn build
-    - run: yarn test
