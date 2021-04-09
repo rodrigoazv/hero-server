@@ -34,6 +34,19 @@ export default class UserService {
     return userSaved;
   }
 
+  async getByIdUnProtected(id: string): Promise<User | any> {
+    try {
+      const user = this.userRepository
+        .createQueryBuilder('user')
+        .where('user.id = :id', { id })
+        .addSelect('user.password')
+        .getOne();
+      return user;
+    } catch (err) {
+      return err;
+    }
+  }
+
   async updateUserChars(char: Char) {
     const favoritChar = await this.userRepository.findOne(char.user.id, {
       relations: ['favoritsChar'],

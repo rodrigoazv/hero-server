@@ -11,6 +11,7 @@ export interface UpdateUser {
 
 export interface ValidFiedlUser {
   nickName: string;
+  password: string;
 }
 
 export interface LikeCharComics {
@@ -62,8 +63,9 @@ const schema = {
     type: 'object',
     properties: {
       nickName: { type: 'string' },
+      password: { type: 'string' },
     },
-    required: ['nickName'],
+    required: ['nickName', 'password'],
   },
 };
 

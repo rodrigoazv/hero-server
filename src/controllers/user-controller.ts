@@ -10,6 +10,7 @@ import axios from 'axios';
 import CharService from '@service/char-service';
 import ComicService from '@service/comic-service';
 import Comic from '@entitys/comics';
+import bcrypt from 'bcrypt';
 import { NotFound } from '../helpers/error';
 import generateToken from '../helpers/auth-handler';
 import {
@@ -216,6 +217,13 @@ class UserController {
       if (userAlready) {
         throw new NotFound('User nickname already exist');
       }
+      const userValid = await userService.getByIdUnProtected(req.userId);
+      const passOk = await bcrypt.compare(content.password, userValid.password);
+
+      if (!passOk) {
+        throw new NotFound('Invalid pass');
+      }
+
       const userOld = await userService.getByIdProtected(req.userId, false);
       if (!userOld) {
         throw new NotFound('User not found');
@@ -227,6 +235,7 @@ class UserController {
       const userCreated = await userService.updateUser(userOld);
       return res.status(200).json({
         sucess: true,
+        newNick: content.nickName,
         user: {
           userCreated,
         },
