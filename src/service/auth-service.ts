@@ -21,8 +21,6 @@ export default class AuthService {
       const user = this.userRepository
         .createQueryBuilder('user')
         .where('user.email = :email', { email })
-        .leftJoinAndSelect('user.favoritsChar', 'favoritsChar')
-        .leftJoinAndSelect('user.favoritsComic', 'favoritsComic')
         .addSelect('user.password')
         .getOne();
       return user;

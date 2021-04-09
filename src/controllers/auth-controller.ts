@@ -40,8 +40,6 @@ class AuthController {
       res.cookie('authorization', token);
       return res.status(200).json({
         sucess: true,
-        likedChar: user.favoritsChar,
-        likedComic: user.favoritsComic,
         token,
       });
     } catch (error) {

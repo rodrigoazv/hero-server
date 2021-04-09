@@ -48,6 +48,29 @@ class UserController {
     }
   }
 
+  /* Method { @Get } for pick user
+   *recive request of UserId type
+   *return token if user is created
+   */
+  public async likeByUser(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<any> {
+    const userService = new UserService();
+    try {
+      const user = await userService.getByIdProtected(req.userId);
+
+      return res.status(200).json({
+        sucess: true,
+        likedChar: user.favoritsChar,
+        likedComic: user.favoritsComic,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   /* Method { @POST } for like char or comic
    *recive request of Char type
    *return token if char like by user
