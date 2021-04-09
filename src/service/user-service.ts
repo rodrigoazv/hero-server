@@ -1,6 +1,8 @@
 import { getManager, Repository } from 'typeorm';
 
 import User from '@entitys/user';
+import Char from '@entitys/char';
+import Comic from '@entitys/comics';
 
 export default class UserService {
   userRepository: Repository<User>;
@@ -32,11 +34,71 @@ export default class UserService {
     return userSaved;
   }
 
-  async getByIdProtected(id: string) {
-    const user = this.userRepository
-      .createQueryBuilder('user')
-      .where('user.id = :id', { id })
-      .getOne();
+  async getByIdUnProtected(id: string): Promise<User | any> {
+    try {
+      const user = this.userRepository
+        .createQueryBuilder('user')
+        .where('user.id = :id', { id })
+        .addSelect('user.password')
+        .getOne();
+      return user;
+    } catch (err) {
+      return err;
+    }
+  }
+
+  async updateUserChars(char: Char) {
+    const favoritChar = await this.userRepository.findOne(char.user.id, {
+      relations: ['favoritsChar'],
+    });
+    favoritChar?.favoritsChar.push(char);
+    return favoritChar;
+  }
+
+  async updateUserComics(comic: Comic) {
+    const favoritComic = await this.userRepository.findOne(comic.user.id, {
+      relations: ['favoritsComic'],
+    });
+    favoritComic?.favoritsComic.push(comic);
+    return favoritComic;
+  }
+
+  async getByNickProtected(
+    nickName: string,
+    relation?: boolean,
+  ): Promise<User | any> {
+    if (!relation) {
+      const user = this.userRepository.findOne({
+        where: {
+          nickName,
+        },
+      });
+      return user;
+    }
+    const user = this.userRepository.findOne({
+      where: {
+        nickName,
+      },
+      relations: ['favoritsChar', 'favoritsComic'],
+    });
+    return user;
+  }
+
+  async getByIdProtected(id: string, relation?: boolean): Promise<User | any> {
+    if (!relation) {
+      const user = this.userRepository.findOneOrFail({
+        where: {
+          id,
+        },
+      });
+      return user;
+    }
+    const user = this.userRepository.findOneOrFail({
+      where: {
+        id,
+      },
+      relations: ['favoritsChar', 'favoritsComic'],
+    });
     return user;
   }
 
@@ -48,7 +110,7 @@ export default class UserService {
     return user;
   }
 
-  async getByNickProtected(nickName: string): Promise<User | any> {
+  async setLikeChar(nickName: string): Promise<User | any> {
     const user = this.userRepository
       .createQueryBuilder('user')
       .where('user.nickName = :nickName', { nickName })

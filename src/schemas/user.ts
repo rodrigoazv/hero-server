@@ -10,8 +10,16 @@ export interface UpdateUser {
 }
 
 export interface ValidFiedlUser {
-  email: string;
   nickName: string;
+  password: string;
+}
+
+export interface LikeCharComics {
+  type: 'characters' | 'comics';
+  id: string;
+  name: string;
+  thumb: string;
+  like: boolean;
 }
 
 export interface CreateUser {
@@ -54,9 +62,10 @@ const schema = {
   userUpdate: {
     type: 'object',
     properties: {
-      email: { type: 'string' },
+      nickName: { type: 'string' },
+      password: { type: 'string' },
     },
-    required: ['email'],
+    required: ['nickName', 'password'],
   },
 };
 

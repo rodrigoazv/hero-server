@@ -10,8 +10,10 @@ import verifyHandle from './middlewares/verify-token-handler';
 const router = Router();
 // User routes
 router.post('/user/create', userController.create);
-router.put('/user/update', userController.update);
-router.get('/user/:id', verifyHandle, userController.indexUserById);
+router.put('/user/update', verifyHandle, userController.update);
+router.get('/user/index', verifyHandle, userController.userProtected);
+router.post('/like/charOrComic', verifyHandle, userController.likeCharComic);
+router.get('/like/byUser', verifyHandle, userController.likeByUser);
 // Auth routes
 router.post('/user/login', authController.login);
 // Char protected routes

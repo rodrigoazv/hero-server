@@ -1,9 +1,16 @@
 /* eslint-disable consistent-return */
 import { Request, Response, NextFunction } from 'express';
 import User from '@entitys/user';
+import Char from '@entitys/char';
+
 import UserService from '@service/user-service';
 import AuthService from '@service/auth-service';
 import { AuthFail } from 'src/middlewares/verify-token-handler';
+import axios from 'axios';
+import CharService from '@service/char-service';
+import ComicService from '@service/comic-service';
+import Comic from '@entitys/comics';
+import bcrypt from 'bcrypt';
 import { NotFound } from '../helpers/error';
 import generateToken from '../helpers/auth-handler';
 import {
@@ -11,6 +18,7 @@ import {
   ValidFiedlUser,
   createUserValidator,
   CreateUser,
+  LikeCharComics,
 } from '../schemas/user';
 
 /* Controller for create/update/exclude user
@@ -18,8 +26,8 @@ import {
  */
 class UserController {
   /* Method { @Get } for pick user
-   *recive request of User type
-   *return token if user is created (Todo)
+   *recive request of UserId type
+   *return token if user is created
    */
   public async indexUserById(
     req: Request,
@@ -28,13 +36,114 @@ class UserController {
   ): Promise<any> {
     const userService = new UserService();
     try {
-      const user = await userService.getByIdProtected(req.params.id);
+      const user = await userService.getByIdProtected(req.userId, true);
 
       return res.status(200).json({
         sucess: true,
         user: {
           user,
         },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /* Method { @Get } for pick user
+   *recive request of UserId type
+   *return token if user is created
+   */
+  public async userProtected(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<any> {
+    const userService = new UserService();
+    try {
+      const user: User = await userService.getByIdProtected(req.userId, true);
+
+      return res.status(200).json({
+        sucess: true,
+        user: {
+          email: user.email,
+          birthDay: user.birthDay,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          nickName: user.nickName,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /* Method { @Get } for pick user
+   *recive request of UserId type
+   *return token if user is created
+   */
+  public async likeByUser(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<any> {
+    const userService = new UserService();
+    try {
+      const user = await userService.getByIdProtected(req.userId, true);
+
+      return res.status(200).json({
+        sucess: true,
+        likedChar: user.favoritsChar,
+        likedComic: user.favoritsComic,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /* Method { @POST } for like char or comic
+   *recive request of Char type
+   *return token if char like by user
+   */
+  public async likeCharComic(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<any> {
+    const userService = new UserService();
+    const charService = new CharService();
+    const comicService = new ComicService();
+    const char = new Char();
+    const comic = new Comic();
+    try {
+      const content = req.body as LikeCharComics;
+      const resp = await axios.get(
+        `http://gateway.marvel.com/v1/public/${content.type}/${content.id}?ts=${process.env.MARVEL_TIMESTAMP}&apikey=${process.env.MARVEL_PUBLIC}&hash=${process.env.MARVEL_HASH}`,
+      );
+      if (resp.data.data.results.length < 1) {
+        throw new NotFound('No char or comic find');
+      }
+
+      const userOld: User = await userService.getByIdProtected(
+        req.userId,
+        true,
+      );
+
+      if (content.type === 'characters') {
+        char.charId = content.id;
+        char.charName = content.name;
+        char.charThumb = content.thumb;
+        char.user = userOld;
+        await charService.insertOne(char, content.like);
+      } else if (content.type === 'comics') {
+        comic.comicId = content.id;
+        comic.comicName = content.name;
+        comic.comicThumb = content.thumb;
+        comic.user = userOld;
+        await comicService.insertOne(comic, content.like);
+      }
+
+      return res.status(200).json({
+        sucess: true,
       });
     } catch (error) {
       next(error);
@@ -102,18 +211,31 @@ class UserController {
     try {
       updateUserValidator(req.body);
       const content = req.body as ValidFiedlUser;
-      const userOld = await userService.getByEmailProtected(content.email);
+      const userAlready = await userService.getByNickProtected(
+        content.nickName,
+      );
+      if (userAlready) {
+        throw new NotFound('User nickname already exist');
+      }
+      const userValid = await userService.getByIdUnProtected(req.userId);
+      const passOk = await bcrypt.compare(content.password, userValid.password);
+
+      if (!passOk) {
+        throw new NotFound('Invalid pass');
+      }
+
+      const userOld = await userService.getByIdProtected(req.userId, false);
       if (!userOld) {
         throw new NotFound('User not found');
       }
       // verify params, if not pass, recive same
-      userOld.firstName = req.body.firstName || userOld.firstName;
-      userOld.nickName = req.body.nickName || userOld.nickName;
+      userOld.nickName = content.nickName;
       /* Service call to update one user
        */
       const userCreated = await userService.updateUser(userOld);
       return res.status(200).json({
         sucess: true,
+        newNick: content.nickName,
         user: {
           userCreated,
         },

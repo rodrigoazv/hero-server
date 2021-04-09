@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import AuthService from '@service/auth-service';
 import bcrypt from 'bcrypt';
 import { AuthFail } from 'src/middlewares/verify-token-handler';
+import User from '@entitys/user';
 import { NotFound } from '../helpers/error';
 import generateToken from '../helpers/auth-handler';
 import { loginUserValidator, UserRequest } from '../schemas/user';
@@ -22,10 +23,11 @@ class AuthController {
     next: NextFunction,
   ): Promise<any> {
     const authService = new AuthService();
+
     try {
       loginUserValidator(req.body);
       const content = req.body as UserRequest;
-      const user = await authService.getByEmail(content.email);
+      const user: User = await authService.getByEmail(content.email);
       if (!user) {
         throw new NotFound('User not found');
       }
