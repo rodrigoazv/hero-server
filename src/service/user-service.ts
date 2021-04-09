@@ -50,7 +50,36 @@ export default class UserService {
     return favoritComic;
   }
 
-  async getByIdProtected(id: string): Promise<User | any> {
+  async getByNickProtected(
+    nickName: string,
+    relation?: boolean,
+  ): Promise<User | any> {
+    if (!relation) {
+      const user = this.userRepository.findOne({
+        where: {
+          nickName,
+        },
+      });
+      return user;
+    }
+    const user = this.userRepository.findOne({
+      where: {
+        nickName,
+      },
+      relations: ['favoritsChar', 'favoritsComic'],
+    });
+    return user;
+  }
+
+  async getByIdProtected(id: string, relation?: boolean): Promise<User | any> {
+    if (!relation) {
+      const user = this.userRepository.findOneOrFail({
+        where: {
+          id,
+        },
+      });
+      return user;
+    }
     const user = this.userRepository.findOneOrFail({
       where: {
         id,
@@ -64,14 +93,6 @@ export default class UserService {
     const user = this.userRepository
       .createQueryBuilder('user')
       .where('user.email = :email', { email })
-      .getOne();
-    return user;
-  }
-
-  async getByNickProtected(nickName: string): Promise<User | any> {
-    const user = this.userRepository
-      .createQueryBuilder('user')
-      .where('user.nickName = :nickName', { nickName })
       .getOne();
     return user;
   }

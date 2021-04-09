@@ -35,12 +35,40 @@ class UserController {
   ): Promise<any> {
     const userService = new UserService();
     try {
-      const user = await userService.getByIdProtected(req.userId);
+      const user = await userService.getByIdProtected(req.userId, true);
 
       return res.status(200).json({
         sucess: true,
         user: {
           user,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /* Method { @Get } for pick user
+   *recive request of UserId type
+   *return token if user is created
+   */
+  public async userProtected(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<any> {
+    const userService = new UserService();
+    try {
+      const user: User = await userService.getByIdProtected(req.userId, true);
+
+      return res.status(200).json({
+        sucess: true,
+        user: {
+          email: user.email,
+          birthDay: user.birthDay,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          nickName: user.nickName,
         },
       });
     } catch (error) {
@@ -59,7 +87,7 @@ class UserController {
   ): Promise<any> {
     const userService = new UserService();
     try {
-      const user = await userService.getByIdProtected(req.userId);
+      const user = await userService.getByIdProtected(req.userId, true);
 
       return res.status(200).json({
         sucess: true,
@@ -94,7 +122,10 @@ class UserController {
         throw new NotFound('No char or comic find');
       }
 
-      const userOld: User = await userService.getByIdProtected(req.userId);
+      const userOld: User = await userService.getByIdProtected(
+        req.userId,
+        true,
+      );
 
       if (content.type === 'characters') {
         char.charId = content.id;
@@ -179,13 +210,18 @@ class UserController {
     try {
       updateUserValidator(req.body);
       const content = req.body as ValidFiedlUser;
-      const userOld = await userService.getByEmailProtected(content.email);
+      const userAlready = await userService.getByNickProtected(
+        content.nickName,
+      );
+      if (userAlready) {
+        throw new NotFound('User nickname already exist');
+      }
+      const userOld = await userService.getByIdProtected(req.userId, false);
       if (!userOld) {
         throw new NotFound('User not found');
       }
       // verify params, if not pass, recive same
-      userOld.firstName = req.body.firstName || userOld.firstName;
-      userOld.nickName = req.body.nickName || userOld.nickName;
+      userOld.nickName = content.nickName;
       /* Service call to update one user
        */
       const userCreated = await userService.updateUser(userOld);

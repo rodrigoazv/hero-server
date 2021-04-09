@@ -10,7 +10,6 @@ export interface UpdateUser {
 }
 
 export interface ValidFiedlUser {
-  email: string;
   nickName: string;
 }
 
@@ -62,9 +61,9 @@ const schema = {
   userUpdate: {
     type: 'object',
     properties: {
-      email: { type: 'string' },
+      nickName: { type: 'string' },
     },
-    required: ['email'],
+    required: ['nickName'],
   },
 };
 

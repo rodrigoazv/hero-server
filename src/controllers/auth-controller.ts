@@ -23,6 +23,7 @@ class AuthController {
     next: NextFunction,
   ): Promise<any> {
     const authService = new AuthService();
+
     try {
       loginUserValidator(req.body);
       const content = req.body as UserRequest;
