@@ -40,7 +40,7 @@ class AuthController {
       const token: string = generateToken(user);
       res.cookie('authorization', token, {
         maxAge: 1000 * 60 * 10,
-        httpOnly: false,
+        httpOnly: true,
         sameSite: 'none',
         secure: true,
       });

@@ -1,5 +1,4 @@
 import express from 'express';
-import cookieSession from 'cookie-session';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { errorHandler } from './helpers/error';
@@ -18,16 +17,6 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   next();
 });
-app.use(
-  cookieSession({
-    name: 'authorization',
-    keys: ['authorization'],
-    domain: process.env.FRONT_END_ALLOW,
-    secure: true,
-    sameSite: 'none',
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
-  }),
-);
 
 // at the suggestion of the eslint documentation,
 // when the require module has a very specific use,
