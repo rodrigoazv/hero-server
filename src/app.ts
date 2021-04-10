@@ -7,16 +7,6 @@ import routes from './routes';
 const app = express();
 app.use(cors());
 
-app.use((req, res, next) => {
-  res.header('Content-Type', 'application/json;charset=UTF-8');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept',
-  );
-  next();
-});
-
 // at the suggestion of the eslint documentation,
 // when the require module has a very specific use,
 // it disables the module in the line
