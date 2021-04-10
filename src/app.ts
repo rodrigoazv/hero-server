@@ -13,7 +13,7 @@ app.use(
     secret: process.env.SECRET || 'pou',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true },
+    cookie: { secure: true, sameSite: 'none', maxAge: 24 * 60 * 60 * 1000 },
   }),
 );
 
