@@ -7,11 +7,22 @@ import routes from './routes';
 
 const app = express();
 app.use(cors({ credentials: true, origin: process.env.FRONT_END_ALLOW }));
-
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept',
+  );
+  res.header('Access-Control-Allow-Headers', '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  next();
+});
 app.use(
   session({
     secret: process.env.SECRET || 'pou',
     resave: false,
+    name: 'authorization',
     saveUninitialized: true,
     cookie: { secure: true, sameSite: 'none', maxAge: 24 * 60 * 60 * 1000 },
   }),
