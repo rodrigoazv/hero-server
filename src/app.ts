@@ -24,6 +24,7 @@ app.use(
     keys: ['authorization'],
     domain: process.env.FRONT_END_ALLOW,
     secure: true,
+    sameSite: 'none',
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
   }),
 );
