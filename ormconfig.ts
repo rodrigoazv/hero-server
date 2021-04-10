@@ -1,6 +1,7 @@
 module.exports = {
   type: 'postgres',
-  url: `${process.env.DATABASE_URL}`,
+  url: process.env.DATABASE_URL,
+
   extra: {
     ssl: {
       rejectUnauthorized: false,
@@ -12,6 +13,5 @@ module.exports = {
     subscribersDir: 'src/subscriber',
   },
   entities: ['dist/src/entitys/**/*.js'],
-
   migrations: ['dist/src/migrations/**/*.js'],
 };
