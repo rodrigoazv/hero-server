@@ -38,7 +38,10 @@ class AuthController {
       }
       // Call to util authHandler, to generateToken
       const token: string = generateToken(user);
-      res.cookie('authorization', token);
+      res.cookie('authorization', token, {
+        maxAge: 1000 * 60 * 10,
+        httpOnly: false,
+      });
       return res.status(200).json({
         sucess: true,
         token,
