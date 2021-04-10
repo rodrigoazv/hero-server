@@ -1,5 +1,6 @@
 module.exports = {
   type: 'postgres',
+  url: process.env.DATABASE_URL,
   username: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE,
@@ -10,7 +11,7 @@ module.exports = {
     entitiesDir: 'src/entity',
     subscribersDir: 'src/subscriber',
   },
-  entities: ['src/entitys/**/*.ts'],
+  entities: ['dist/src/entitys/**/*.js'],
 
-  migrations: ['src/migrations/**/*.ts'],
+  migrations: ['dist/src/migrations/**/*.js'],
 };

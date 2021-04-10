@@ -1,6 +1,6 @@
 import { getManager, Repository } from 'typeorm';
 
-import Comic from '@entitys/comics';
+import Comic from '../entitys/comics';
 
 export default class comicService {
   comicRepository: Repository<Comic>;
