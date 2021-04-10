@@ -6,7 +6,7 @@ import routes from './routes';
 
 const app = express();
 
-app.use(cors({ origin: process.env.FRONT_END_ALLOW }));
+app.use(cors({ credentials: true, origin: process.env.FRONT_END_ALLOW }));
 
 // at the suggestion of the eslint documentation,
 // when the require module has a very specific use,
