@@ -1,9 +1,9 @@
 /* eslint-disable consistent-return */
 import { NextFunction, Request, Response } from 'express';
-import AuthService from '@service/auth-service';
 import bcrypt from 'bcrypt';
-import { AuthFail } from 'src/middlewares/verify-token-handler';
-import User from '@entitys/user';
+import AuthService from '../service/auth-service';
+import User from '../entitys/user';
+import { AuthFail } from '../middlewares/verify-token-handler';
 import { NotFound } from '../helpers/error';
 import generateToken from '../helpers/auth-handler';
 import { loginUserValidator, UserRequest } from '../schemas/user';

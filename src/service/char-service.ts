@@ -1,6 +1,6 @@
 import { getManager, Repository } from 'typeorm';
 
-import Char from '@entitys/char';
+import Char from '../entitys/char';
 
 export default class CharService {
   charRepository: Repository<Char>;

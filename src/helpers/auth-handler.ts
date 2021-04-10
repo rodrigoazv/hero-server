@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-import User from '@entitys/user';
+import User from '../entitys/user';
 
 export default function generateToken(user: User) {
   const token = jwt.sign(

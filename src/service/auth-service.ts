@@ -1,6 +1,6 @@
 import { getManager, Repository } from 'typeorm';
 
-import User from '@entitys/user';
+import User from '../entitys/user';
 
 export default class AuthService {
   userRepository: Repository<User>;

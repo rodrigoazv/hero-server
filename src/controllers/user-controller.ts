@@ -1,16 +1,16 @@
 /* eslint-disable consistent-return */
 import { Request, Response, NextFunction } from 'express';
-import User from '@entitys/user';
-import Char from '@entitys/char';
-
-import UserService from '@service/user-service';
-import AuthService from '@service/auth-service';
-import { AuthFail } from 'src/middlewares/verify-token-handler';
 import axios from 'axios';
-import CharService from '@service/char-service';
-import ComicService from '@service/comic-service';
-import Comic from '@entitys/comics';
 import bcrypt from 'bcrypt';
+import User from '../entitys/user';
+import Char from '../entitys/char';
+
+import UserService from '../service/user-service';
+import AuthService from '../service/auth-service';
+import CharService from '../service/char-service';
+import ComicService from '../service/comic-service';
+import Comic from '../entitys/comics';
+import { AuthFail } from '../middlewares/verify-token-handler';
 import { NotFound } from '../helpers/error';
 import generateToken from '../helpers/auth-handler';
 import {

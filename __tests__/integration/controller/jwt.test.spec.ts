@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { createConnection } from 'typeorm';
 import request from 'supertest';
-import app from '../../../app';
+import app from '../../../src/app';
 
 describe('Auth JWT integration tests', () => {
   beforeAll(async () => {

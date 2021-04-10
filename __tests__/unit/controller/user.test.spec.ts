@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
-import User from '@entitys/user';
 import { createConnection } from 'typeorm';
-import UserService from '@service/user-service';
+import User from '../../../src/entitys/user';
+import UserService from '../../../src/service/user-service';
 
 describe('User unit tests', () => {
   beforeAll(async () => {
