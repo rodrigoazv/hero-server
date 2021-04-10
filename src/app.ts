@@ -1,5 +1,5 @@
 import express from 'express';
-import session from 'express-session';
+import cookieSession from 'cookie-session';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { errorHandler } from './helpers/error';
@@ -19,12 +19,12 @@ app.use((req, res, next) => {
   next();
 });
 app.use(
-  session({
-    secret: process.env.SECRET || 'pou',
-    resave: false,
+  cookieSession({
     name: 'authorization',
-    saveUninitialized: true,
-    cookie: { secure: true, sameSite: 'none', maxAge: 24 * 60 * 60 * 1000 },
+    keys: ['authorization'],
+    domain: process.env.FRONT_END_ALLOW,
+    secure: true,
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
   }),
 );
 
