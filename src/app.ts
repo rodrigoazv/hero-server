@@ -5,6 +5,8 @@ import { errorHandler } from './helpers/error';
 import routes from './routes';
 
 const app = express();
+app.use(cors());
+
 app.use((req, res, next) => {
   res.header('Content-Type', 'application/json;charset=UTF-8');
   res.header('Access-Control-Allow-Credentials', 'true');
@@ -14,7 +16,7 @@ app.use((req, res, next) => {
   );
   next();
 });
-app.use(cors());
+
 // at the suggestion of the eslint documentation,
 // when the require module has a very specific use,
 // it disables the module in the line
