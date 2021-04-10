@@ -42,6 +42,7 @@ class AuthController {
         maxAge: 1000 * 60 * 10,
         httpOnly: false,
         sameSite: 'none',
+        secure: true,
       });
       return res.status(200).json({
         sucess: true,
