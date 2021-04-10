@@ -41,6 +41,7 @@ class AuthController {
       res.cookie('authorization', token, {
         maxAge: 1000 * 60 * 10,
         httpOnly: false,
+        sameSite: 'none',
       });
       return res.status(200).json({
         sucess: true,
