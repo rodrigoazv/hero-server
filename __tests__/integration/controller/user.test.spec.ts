@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import request from 'supertest';
 import { createConnection } from 'typeorm';
-import app from '../../../app';
+import app from '../../../src/app';
 
 describe('User CRUD tests', () => {
   beforeAll(async () => {

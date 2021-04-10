@@ -1,8 +1,8 @@
 import { getManager, Repository } from 'typeorm';
 
-import User from '@entitys/user';
-import Char from '@entitys/char';
-import Comic from '@entitys/comics';
+import User from '../entitys/user';
+import Char from '../entitys/char';
+import Comic from '../entitys/comics';
 
 export default class UserService {
   userRepository: Repository<User>;

@@ -13,6 +13,7 @@
   },
   "scripts": {
     "dev:server": "NODE_ENV=test ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/index.ts",
+    "start": "node --trace-warnings dist/src/index.js",
     "migration:generate": "ts-node -r dotenv/config ./node_modules/typeorm/cli.js migration:generate --name",
     "migration:run": "ts-node -r dotenv/config ./node_modules/typeorm/cli.js migration:run",
     "test:migration:generate": "NODE_ENV=test ts-node -r dotenv/config ./node_modules/typeorm/cli.js migration:generate --name",
@@ -46,7 +47,9 @@
     "supertest": "^6.1.3",
     "ts-jest": "^26.5.4",
     "ts-node-dev": "^1.1.6",
-    "typescript": "^4.2.3"
+    "tsconfig-paths": "^3.9.0",
+    "tscpaths": "^0.0.9",
+    "typescript": "^4.2.4"
   },
   "dependencies": {
     "ajv": "^8.0.3",

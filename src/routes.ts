@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
 // Controllers imports
-import userController from '@controllers/user-controller';
-import authController from '@controllers/auth-controller';
-import marvelController from '@controllers/marvel-controller';
+import userController from './controllers/user-controller';
+import authController from './controllers/auth-controller';
+import marvelController from './controllers/marvel-controller';
 // Middleware imports
 import verifyHandle from './middlewares/verify-token-handler';
 

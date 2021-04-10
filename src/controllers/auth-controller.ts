@@ -1,9 +1,9 @@
 /* eslint-disable consistent-return */
 import { NextFunction, Request, Response } from 'express';
-import AuthService from '@service/auth-service';
 import bcrypt from 'bcrypt';
-import { AuthFail } from 'src/middlewares/verify-token-handler';
-import User from '@entitys/user';
+import AuthService from '../service/auth-service';
+import User from '../entitys/user';
+import { AuthFail } from '../middlewares/verify-token-handler';
 import { NotFound } from '../helpers/error';
 import generateToken from '../helpers/auth-handler';
 import { loginUserValidator, UserRequest } from '../schemas/user';
@@ -38,7 +38,12 @@ class AuthController {
       }
       // Call to util authHandler, to generateToken
       const token: string = generateToken(user);
-      res.cookie('authorization', token);
+      res.cookie('authorization', token, {
+        maxAge: 1000 * 60 * 10,
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+      });
       return res.status(200).json({
         sucess: true,
         token,
