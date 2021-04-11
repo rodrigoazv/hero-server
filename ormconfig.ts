@@ -12,6 +12,12 @@ module.exports = {
     entitiesDir: 'src/entity',
     subscribersDir: 'src/subscriber',
   },
-  entities: ['dist/src/entitys/**/*.js'],
-  migrations: ['dist/src/migrations/**/*.js'],
+  entities:
+    process.env.NODE_ENV === 'test'
+      ? ['src/entitys/**/*.ts']
+      : ['dist/src/entitys/**/*.js'],
+  migrations:
+    process.env.NODE_ENV === 'test'
+      ? ['src/migrations/**/*.ts']
+      : ['dist/src/migrations/**/*.js'],
 };
