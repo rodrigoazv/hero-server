@@ -4,6 +4,8 @@ import { Request, Response, NextFunction } from 'express';
 
 export class AuthFail extends Error {}
 
+/* verifyToken JWT is valid? */
+
 export default function verifyToken(
   req: Request,
   res: Response,

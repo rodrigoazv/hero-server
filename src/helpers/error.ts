@@ -2,6 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import { SchemaError } from './schema-validation';
 import { AuthFail } from '../middlewares/verify-token-handler';
 
+/* GLOBAL error handler, after all controllers call
+if error in trycatch block, the next pass error to this 
+controller */
 interface ErrorType {
   content: {
     type: string;
