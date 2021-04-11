@@ -53,7 +53,6 @@ export async function errorHandler(
       },
       status: 404,
     };
-    res.cookie('authorization', '');
   }
   return res.status(errorBody.status).json({ error: errorBody.content });
 }
