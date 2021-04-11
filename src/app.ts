@@ -8,7 +8,9 @@ import routes from './routes';
 dotenv.config();
 
 const app = express();
+
 console.log(`Allow ${process.env.FRONT_END_ALLOW}`);
+
 app.use(cors({ credentials: true, origin: process.env.FRONT_END_ALLOW }));
 
 // at the suggestion of the eslint documentation,
