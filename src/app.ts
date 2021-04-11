@@ -1,10 +1,14 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import dotenv from 'dotenv';
 import { errorHandler } from './helpers/error';
 import routes from './routes';
 
+dotenv.config();
+
 const app = express();
+console.log(`Allow ${process.env.FRONT_END_ALLOW}`);
 app.use(cors({ credentials: true, origin: process.env.FRONT_END_ALLOW }));
 
 // at the suggestion of the eslint documentation,
