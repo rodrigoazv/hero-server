@@ -48,7 +48,7 @@ API da marvel para pegar credênciais[.MarvelApi](https://developer.marvel.com/)
 ```bash
 
 # Clone este repositório
-$ git clone https://github.com/palomaarize/GuiaBar.git
+$ git clone https://github.com/rodrigoazv/hero-server
 
 # Acesse a pasta do projeto no terminal/cmd
 $ cd hero-server
@@ -85,3 +85,6 @@ Esta primeira versão contempla as seguintes features
     - Ver char ou comics individualmente
     - Ver favoritos comics e char
 
+# License 
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
